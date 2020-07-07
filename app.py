@@ -1,21 +1,42 @@
 from flask import Flask
 from flask import render_template
+from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
 
-dummyData = [
-    {
-        "f_name": "Mark",
-        "l_name": "Rafferty",
-        "title": "Mr",
-        "content": "Blah blah blah"
-    },
-    {
-        "f_name": "Jim",
-        "l_name": "Jones",
-        "title": "Mr",
-        "content": "More content"
-    }
-]
+#86.2.192.144
+
+
+app.config['SECRET_KEY'] = environ.get('SECRET_KEY')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + \
+                                        environ.get('MYSQL_USER') + \
+                                        ':' + \
+                                        environ.get('MYSQL_PASSWORD') + \
+                                        '@' + \
+                                        environ.get('MYSQL_HOST') + \
+                                        ':' + \
+                                        environ.get('MYSQL_PORT') + \
+                                        '/' + \
+                                        environ.get('MYSQL_DB_NAME')
+db = SQLAlchemy(app)
+
+class Posts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    f_name = db.Column(db.String(30), nullable=False)
+    l_name = db.Column(db.String(30), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.String(300), nullable=False, unique=True)
+
+    def __repr__(self):
+        return ''.join(
+            [
+                'Title: ' + self.title + '\n'
+                'Name: ' + self.f_name + ' ' + self.l_name + '\n'
+                'Content: ' + self.content
+            ]
+        )
+
 
 dummyContact = [
     {
@@ -34,7 +55,8 @@ dummyContact = [
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('homepage.html', title='Homepage', posts=dummyData)
+    post_data = Posts.query.all()
+    return render_template('homepage.html', title='Homepage', posts=post_data)
 
 
 @app.route('/about')
@@ -44,6 +66,25 @@ def about():
 @app.route('/another')
 def another():
     return render_template('another.html', title='Another')
+
+@app.route('/create')
+def create():
+    db.create_all()
+    post = Posts(f_name='Mark', l_name='Rafferty', title='Mr.', content='Blah Blah Blah')
+    post2 = Posts(f_name='Mark2', l_name='Rafferty2', title='Mr.', content='Blah Blah Blah')
+    db.session.add(post)
+    db.session.add(post2)
+    db.session.commit()
+    return "Added table and populated some records"
+
+@app.route('/delete')
+def delete():
+    db.drop_all()
+#    db.session.query(Posts).delete
+    db.session.commit()
+    return "All Tables have been dropped"
+
+
 
 if __name__ == '__main__':
     app.run()
