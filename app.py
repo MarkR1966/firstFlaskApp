@@ -9,6 +9,7 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = environ.get('SECRET_KEY')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Sup3rn0va01@34.89.36.49:3306/posts'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + \
                                         environ.get('MYSQL_USER') + \
                                         ':' + \
@@ -71,7 +72,7 @@ def another():
 def create():
     db.create_all()
     post = Posts(f_name='Mark', l_name='Rafferty', title='Mr.', content='Blah Blah Blah')
-    post2 = Posts(f_name='Mark2', l_name='Rafferty2', title='Mr.', content='Blah Blah Blah')
+    post2 = Posts(f_name='Mark2', l_name='Rafferty2', title='Mr.', content='More content')
     db.session.add(post)
     db.session.add(post2)
     db.session.commit()
@@ -79,11 +80,10 @@ def create():
 
 @app.route('/delete')
 def delete():
-    db.drop_all()
-#    db.session.query(Posts).delete
+    db.drop_all()  # drops all the schemas
+    #db.session.query(Posts).delete()  # deletes the contents of the table
     db.session.commit()
-    return "All Tables have been dropped"
-
+    return "everything is gone woops soz"
 
 
 if __name__ == '__main__':
