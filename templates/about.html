@@ -2,4 +2,13 @@
 
 {% block body_content %}
     <h1>This is the About page</h1>
+
+    {% for contact in contacts %}
+        <div>
+            <h3>{{ contact.branch }}</h3>
+            <p><b>Address: </b> {{ contact.address }}</p>
+            <p><b>Contact: </b> {{ contact.cont }}</p>
+            <p><b>Telephone: </b> {{ contact.tel }}</p>
+        </div>
+    {% endfor %}
 {% endblock %}

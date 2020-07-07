@@ -16,6 +16,21 @@ dummyData = [
         "content": "More content"
     }
 ]
+
+dummyContact = [
+    {
+        "branch": "Head Office",
+        "address": "Manchester",
+        "cont": "Mr James Brown",
+        "tel": "123-456-789"
+    },
+    {
+        "branch": "Sales Office",
+        "address": "Glasgow",
+        "cont": "Mr Steve Smith",
+        "tel": "789-456-789"
+    }
+]
 @app.route('/')
 @app.route('/home')
 def home():
@@ -24,7 +39,7 @@ def home():
 
 @app.route('/about')
 def about():
-    return render_template('about.html', title='About')
+    return render_template('about.html', title='About', contacts=dummyContact)
 
 @app.route('/another')
 def another():
