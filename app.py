@@ -2,6 +2,9 @@ from flask import Flask
 from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
+
+from forms import PostsForm
+
 app = Flask(__name__)
 
 #86.2.192.144
@@ -64,6 +67,11 @@ def home():
 def about():
     return render_template('about.html', title='About', contacts=dummyContact)
 
+@app.route('/add')
+def add():
+    form = PostsForm()
+    return render_template('post.html', title='Add a post', form=form)
+
 @app.route('/another')
 def another():
     return render_template('another.html', title='Another')
@@ -80,8 +88,8 @@ def create():
 
 @app.route('/delete')
 def delete():
-    db.drop_all()  # drops all the schemas
-    #db.session.query(Posts).delete()  # deletes the contents of the table
+    #db.drop_all()  # drops all the schemas
+    db.session.query(Posts).delete()  # deletes the contents of the table
     db.session.commit()
     return "everything is gone woops soz"
 
