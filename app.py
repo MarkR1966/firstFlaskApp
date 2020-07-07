@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
-
+from os import environ
 app = Flask(__name__)
 
 #86.2.192.144
