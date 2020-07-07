@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body_content %}
+   <div class=""form">
+        <form method="post" action = "">
+            {{ form.hiddentag() }}
+            {{ form.f_name.label }}
+            {{ form.f_name }}
+            <br>
+            {{ form.l_name.label }}
+            {{ form.f_name }}
+            <br>
+            {{ form.title.label }}
+            {{ form.f_name }}
+            <br>
+            {{ form.content.label }}
+            {{ form.f_name }}
+            <br>
+            {{ form.submit }}
+        </form>
+
+    </div>
+{% endblock %}
